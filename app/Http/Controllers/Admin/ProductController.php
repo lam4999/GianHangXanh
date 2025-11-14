@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category; 
+use App\Models\Category;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\Product;
@@ -21,11 +21,11 @@ class ProductController extends Controller
     }
 
     public function create()
-{
-    $attributes = Attribute::with('values')->orderBy('name')->get();
-    $categories = Category::orderBy('name')->get(); // thêm
-    return view('admin.products.create', compact('attributes','categories')); // đổi
-}
+    {
+        $attributes = Attribute::with('values')->orderBy('name')->get();
+        $categories = Category::orderBy('name')->get(); // thêm
+        return view('admin.products.create', compact('attributes', 'categories')); // đổi
+    }
 
     public function store(Request $request)
     {
@@ -64,12 +64,12 @@ class ProductController extends Controller
     }
 
     public function edit($id)
-{
-    $product    = Product::with(['variants.values.attribute'])->findOrFail($id);
-    $attributes = Attribute::with('values')->orderBy('name')->get();
-    $categories = Category::orderBy('name')->get(); // thêm
-    return view('admin.products.edit', compact('product','attributes','categories')); // đổi
-}
+    {
+        $product    = Product::with(['variants.values.attribute'])->findOrFail($id);
+        $attributes = Attribute::with('values')->orderBy('name')->get();
+        $categories = Category::orderBy('name')->get(); // thêm
+        return view('admin.products.edit', compact('product', 'attributes', 'categories')); // đổi
+    }
 
     public function update(Request $request, $id)
     {
@@ -188,5 +188,17 @@ class ProductController extends Controller
         })->all();
 
         return implode('-', $parts);
+    }
+    public function search(Request $request)
+    {
+        $keyword = $request->keyword;
+
+        $products = Product::where('name', 'LIKE', '%' . $keyword . '%')
+            ->orWhere('description', 'LIKE', '%' . $keyword . '%')
+            ->paginate(12);
+
+        $categories = Category::all();
+
+        return view('search.search', compact('products', 'categories', 'keyword'));
     }
 }
