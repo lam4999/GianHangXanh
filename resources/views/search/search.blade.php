@@ -15,7 +15,7 @@
                 </a>
                 <p class="text-success fw-bold mb-2">{{ number_format($p->price,0,',','.') }}₫</p>
                 <div class="mt-auto">
-                    <a href="{{ route('product.show', $p->id) }}" class="btn btn-outline-success btn-sm w-100">Xem chi tiết</a>
+                    <a href="{{ route('product.show', $p->id) }}" class="btn btn-outline-success btn-sm w-100">Xem chi tiết sp </a>
                 </div>
             </div>
         </div>
